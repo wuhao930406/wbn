@@ -1,0 +1,90 @@
+@import '~antd/es/style/themes/default.less';
+@keyframes bgmove{
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes rebgmove{
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.main {
+  width: 428px;
+  margin: 0 auto;
+  border-radius: 4px;
+  margin-top: -10vh;
+  overflow: hidden;
+  .head{
+    background-color:rgba(255,255,255, 0.4);
+    padding: 24px;
+    font-size: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-weight: bolder;
+    color: #ffffff;
+    position: relative;
+    img{
+      animation: rebgmove 4s;
+    }
+    img:last-child{
+      position: absolute;
+      left: 0;
+      right: 0;
+      margin: auto;
+      animation: bgmove 4s forwards;
+    }
+  }
+  .body{
+    background-color: rgba(255,255,255, 0.9);
+    padding: 24px;
+
+  }
+
+  @media screen and (max-width: @screen-sm) {
+    width: 90%;
+    max-width: 428px;
+  }
+
+  :global {
+    .@{ant-prefix}-tabs-nav-list {
+      margin: auto;
+      font-size: 16rpx;
+    }
+  }
+
+  .icon {
+    margin-left: 16px;
+    color: rgba(0, 0, 0, 0.2);
+    font-size: 24px;
+    vertical-align: middle;
+    cursor: pointer;
+    transition: color 0.3s;
+
+    &:hover {
+      color: @primary-color;
+    }
+  }
+
+  .other {
+    margin-top: 24px;
+    line-height: 22px;
+    text-align: left;
+    .register {
+      float: right;
+    }
+  }
+
+  .prefixIcon {
+    color: @primary-color;
+    font-size: @font-size-base;
+  }
+}
