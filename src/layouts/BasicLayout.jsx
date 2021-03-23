@@ -4,15 +4,14 @@
  * https://github.com/ant-design/ant-design-pro-layout
  */
 import ProLayout, { DefaultFooter } from '@ant-design/pro-layout';
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useIntl, connect, history } from 'umi';
-import { GithubOutlined } from '@ant-design/icons';
-import { Result, Button } from 'antd';
+import { Result, Button, Input } from 'antd';
 import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import { getMatchMenu } from '@umijs/route-utils';
 import logo from '../assets/logo_simple.png';
-
+import { SearchOutlined } from '@ant-design/icons';
 
 const noMatch = (
   <Result
@@ -40,7 +39,7 @@ const menuDataRender = (menuList) =>
   });
 
 const defaultFooterDom = (
-  <a style={{textAlign:"center",marginBottom:12,color:"#999"}}>
+  <a style={{ textAlign: "center", marginBottom: 12, color: "#999" }}>
     告辰集团体验技术部出品
   </a>
 );
@@ -55,11 +54,12 @@ const BasicLayout = (props) => {
     },
   } = props;
   const menuDataRef = useRef([]);
+  const [keyWord, setKeyWord] = useState('');
   useEffect(() => {
     window.dataconfig = {
-      tableMethod:"GET",
-      tableTokenkey:"Authorization",     
-      serverURL:"/api/file"  
+      tableMethod: "GET",
+      tableTokenkey: "Authorization",
+      serverURL: "/api/file"
     }
     if (dispatch) {
       dispatch({
@@ -88,13 +88,31 @@ const BasicLayout = (props) => {
     [location.pathname],
   );
   const { formatMessage } = useIntl();
+
+  const filterByMenuDate = (data, keyWord) => {
+    return data.map((item) => {
+      if (
+        (item.name && item.name.includes(keyWord)) ||
+        filterByMenuDate(item.children || [], keyWord).length > 0
+      ) {
+        return {
+          ...item,
+          children: filterByMenuDate(item.children || [], keyWord),
+        };
+      }
+      return undefined;
+    }).filter((item) => item)
+  }
+
+
   return (
     <ProLayout
-      logo={logo}
-      formatMessage={formatMessage}
-      menu={{ locale: false }}
       {...props}
       {...settings}
+      logo={logo}
+      fixedHeader={true}
+      formatMessage={formatMessage}
+      menu={{ locale: false }}
       onCollapse={handleMenuCollapse}
       onMenuHeaderClick={() => history.push('/')}
       menuItemRender={(menuItemProps, defaultDom) => {
@@ -128,10 +146,19 @@ const BasicLayout = (props) => {
       footerRender={() => defaultFooterDom}
       menuDataRender={menuDataRender}
       rightContentRender={() => <RightContent />}
-      postMenuData={(menuData) => {
-        menuDataRef.current = menuData || [];
-        return menuData || [];
-      }}
+      menuExtraRender={({ collapsed }) =>
+        !collapsed && (
+          <Input
+            prefix={<SearchOutlined />}
+            placeholder="搜索菜单"
+            style={{overflow:"hidden"}}
+            onChange={(e) => {
+              setKeyWord(e.target.value);
+            }}
+          />
+        )
+      }
+      postMenuData={(menus) => filterByMenuDate(menus || [], keyWord)}
     >
       <Authorized authority={authorized.authority} noMatch={noMatch}>
         {children}

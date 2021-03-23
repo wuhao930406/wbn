@@ -38,8 +38,51 @@ export default [
                 icon: 'setting',
                 routes: [
                   {
+                    path: '/basic/paytip',
+                    name: '提成设置',
+                    component: './Basic/User',
+                  },
+                  {
+                    path: '/basic/payway',
+                    name: '收款方式',
+                    component: './Basic/User',
+                  },
+                  {
+                    path: '/basic/paypriod',
+                    name: '收款周期',
+                    component: './Basic/User',
+                  },
+                  {
+                    path: '/basic/customertype',
+                    name: '客户公司类型',
+                    component: './Basic/User',
+                  },
+                  {
+                    path: '/basic/area',
+                    name: '经营区域',
+                    component: './Basic/User',
+                    routes:[
+                      {
+                        path: '/basic/area/a',
+                        name: '编码规则配置',
+                        component: './Basic/User',
+                      },{
+                        path: '/basic/area/b',
+                        name: '收款账户配置',
+                        component: './Basic/User',
+                      }
+                    ]
+
+
+                  },
+                  {
+                    path: '/basic/department',
+                    name: '部门管理',
+                    component: './Basic/User',
+                  },
+                  {
                     path: '/basic/user',
-                    name: '用户管理',
+                    name: '职员管理',
                     component: './Basic/User',
                   },
                   {
@@ -52,6 +95,7 @@ export default [
                     name: '菜单权限',
                     component: './Basic/Menu',
                   },
+                  
                 ],
               },
               {
