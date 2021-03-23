@@ -31,7 +31,7 @@ function Member(props) {
 
         }),
         [activekey, setactivekey] = useState("agent"),
-        [promo_num,cp]=useState("asc");
+        [promo_num, cp] = useState("asc");
 
     const actionRef = useRef();
     let { data } = useRequest(() => attention())
@@ -145,80 +145,84 @@ function Member(props) {
 
 
     return (
-        <Card title={<a style={{ fontSize: 18, paddingLeft: 6, color: "#333" }}>{props.route.name}</a>} tabProps={{ type: "card" }} tabList={tabList} activeTabKey={activekey} onTabChange={key => {
-            setactivekey(key)
-        }} extra={<a style={{ color: "#f50" }}>共 <b style={{ fontSize: 24, padding: "0 4px" }}>{data}</b>人关注公众号</a>} tabBarExtraContent={<a onClick={()=>{
-            cp((promo_num)=>{
-                if(promo_num=="asc"){
-                    return "desc"
-                }else{
-                    return "asc"
-                }
-            })
-        }}>排名{promo_num=="desc"?"由少到多":"由多到少"}</a>}>
-            <AutoTable
-                columns={columns}
-                actionRef={actionRef}
-                extraparams={{ identity: activekey,promo_num }}
-                path="/api/member"
-            ></AutoTable>
+        <div style={{ backgroundColor: "lightblue", height: "100%" }}>
+            <Card
+                bordered={false}
+                title={<a style={{ fontSize: 18, paddingLeft: 6, color: "#333" }}>{props.route.name}</a>} tabProps={{ type: "card" }} tabList={tabList} activeTabKey={activekey} onTabChange={key => {
+                    setactivekey(key)
+                }}
+                extra={<a style={{ color: "#f50" }}>共 <b style={{ fontSize: 24, padding: "0 4px" }}>{data}</b>人关注公众号</a>} tabBarExtraContent={<a onClick={() => {
+                    cp((promo_num) => {
+                        if (promo_num == "asc") {
+                            return "desc"
+                        } else {
+                            return "asc"
+                        }
+                    })
+                }}>排名{promo_num == "desc" ? "由少到多" : "由多到少"}</a>}>
+                <AutoTable
+                    columns={columns}
+                    actionRef={actionRef}
+                    extraparams={{ identity: activekey, promo_num }}
+                    path="/api/member"
+                ></AutoTable>
 
-            <Modal
-                maskClosable={false}
-                title={iftype.title}
-                visible={vs}
-                onCancel={() => cvs(false)}
-                footer={iftype.type == "edit" ? [
-                    <Button type='primary' onClick={() => {
-                        updatemember({ id: iftype.curitem.id, identity: value }).then(res => {
-                            actionRef.current.reload();
-                            message.success("操作成功！");
-                            cvs(false)
-                        })
-                    }}>修改</Button>
-                ] : false}
-                width={1000}
-                style={{ top: 20 }}
-                destroyOnClose={true}
-            >
-                {
-                    iftype.type == "edit" ?
-                        <div style={{ padding: 12 }}>
-                            <Radio.Group onChange={onChange} defaultValue={iftype.curitem.identity}>
-                                <Radio value={"agent"}>经纪人</Radio>
-                                <Radio value={"promoter"}>推广员</Radio>
-                                <Radio value={"user"}>普通用户</Radio>
-                            </Radio.Group>
-                        </div>
-                        : <AutoTable
-                            columns={[
-                                {
-                                    title: '头像',
-                                    dataIndex: 'head_image',
-                                    key: 'head_image',
-                                    search: false,
-                                    render: (_, record) => {
-                                        return <div className="center">
-                                            <RenderClickImg url={record.head_image} style={{ margin: "0 2px 2px 0" }}></RenderClickImg>
-                                        </div>
-                                    }
-                                },
-                                {
-                                    title: '会员名称',
-                                    dataIndex: 'name',
-                                    key: 'name',
-                                },
-                            ]}
-                            dataSource={iftype.list}
-                        ></AutoTable>
+                <Modal
+                    maskClosable={false}
+                    title={iftype.title}
+                    visible={vs}
+                    onCancel={() => cvs(false)}
+                    footer={iftype.type == "edit" ? [
+                        <Button type='primary' onClick={() => {
+                            updatemember({ id: iftype.curitem.id, identity: value }).then(res => {
+                                actionRef.current.reload();
+                                message.success("操作成功！");
+                                cvs(false)
+                            })
+                        }}>修改</Button>
+                    ] : false}
+                    width={1000}
+                    style={{ top: 20 }}
+                    destroyOnClose={true}
+                >
+                    {
+                        iftype.type == "edit" ?
+                            <div style={{ padding: 12 }}>
+                                <Radio.Group onChange={onChange} defaultValue={iftype.curitem.identity}>
+                                    <Radio value={"agent"}>经纪人</Radio>
+                                    <Radio value={"promoter"}>推广员</Radio>
+                                    <Radio value={"user"}>普通用户</Radio>
+                                </Radio.Group>
+                            </div>
+                            : <AutoTable
+                                columns={[
+                                    {
+                                        title: '头像',
+                                        dataIndex: 'head_image',
+                                        key: 'head_image',
+                                        search: false,
+                                        render: (_, record) => {
+                                            return <div className="center">
+                                                <RenderClickImg url={record.head_image} style={{ margin: "0 2px 2px 0" }}></RenderClickImg>
+                                            </div>
+                                        }
+                                    },
+                                    {
+                                        title: '会员名称',
+                                        dataIndex: 'name',
+                                        key: 'name',
+                                    },
+                                ]}
+                                dataSource={iftype.list}
+                            ></AutoTable>
 
-                }
-            </Modal>
+                    }
+                </Modal>
 
 
 
-        </Card>
-    )
+            </Card>
+        </div>)
 }
 
 export default connect(({ weapp, loading }) => ({

@@ -38,6 +38,11 @@ export default [
                 icon: 'setting',
                 routes: [
                   {
+                    path: '/basic/team',
+                    name: '业务团队',
+                    component: './Basic/User',
+                  },
+                  {
                     path: '/basic/paytip',
                     name: '提成设置',
                     component: './Basic/User',
@@ -56,6 +61,13 @@ export default [
                     path: '/basic/customertype',
                     name: '客户公司类型',
                     component: './Basic/User',
+                    routes:[
+                      {
+                        path: '/basic/area/a',
+                        name: '税负率设置',
+                        component: './Basic/User',
+                      }
+                    ]
                   },
                   {
                     path: '/basic/area',

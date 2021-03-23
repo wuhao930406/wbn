@@ -181,11 +181,11 @@ function User(props) {
                 return Array.isArray(record.stores) ? record.stores.map((it, i) => <Tag color="lightblue" key={i}>{it.store_name}</Tag>) : "-"
             }
         },
-
         {
             title: '操作',
             valueType: 'option',
             width:160,
+            fixed:"right",
             render: (text, record, _, action) => [
                 <a
                     onClick={() => {
@@ -306,6 +306,7 @@ function User(props) {
     return (
         <Card title={props.route.name} extra={extrarender}>
             <AutoTable
+                x={990}
                 columns={columns}
                 actionRef={actionRef}
                 path="/api/user"
