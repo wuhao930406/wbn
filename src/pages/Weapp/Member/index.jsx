@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import ReactDOM from 'react-dom';
-import { Card, Tabs, Button, Modal, Radio, Tag, message } from 'antd'
+import { Card, Tabs, Button, Modal, Radio, Tag, message,Avatar } from 'antd'
 import AutoTable from '@/components/AutoTable'
 import InitForm from '@/components/InitForm'
 import { connect, useRequest } from 'umi'
@@ -165,6 +165,8 @@ function Member(props) {
                     actionRef={actionRef}
                     extraparams={{ identity: activekey, promo_num }}
                     path="/api/member"
+                    title = "name"
+                    avatar = "head_image"
                 ></AutoTable>
 
                 <Modal

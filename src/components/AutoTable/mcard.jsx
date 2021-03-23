@@ -3,6 +3,7 @@ import { PullToRefresh, ListView, Button } from 'antd-mobile';
 import LoadingFooter from './LoadingFooter';
 import ProCard from '@ant-design/pro-card';
 import { getFetch } from "@/utils/doFetch";
+import { Row, Col } from 'antd'
 
 
 class Mcard extends PureComponent {
@@ -31,7 +32,7 @@ class Mcard extends PureComponent {
         if (!path) {
             return
         } else {
-            getFetch({url:path,params:this.state.params}).then((res) => {
+            getFetch({ url: path, params: this.state.params }).then((res) => {
                 if (!res.data) {
                     return;
                 }
@@ -97,15 +98,14 @@ class Mcard extends PureComponent {
             refreshing,
             hasMore,
             isEmpty,
-        } = this.state;
-        console.log(dataSource)
-
+        } = this.state,
+            { columns, title, avatar } = this.props;
         return (
             <ListView
                 ref={(el) => (this.lv = el)}
                 dataSource={dataSource}
                 renderHeader={() => (
-                    <Button>sada</Button>
+                    <Button>筛选</Button>
                 )}
                 renderFooter={() => (
                     <LoadingFooter
@@ -114,9 +114,23 @@ class Mcard extends PureComponent {
                     ></LoadingFooter>
                 )}
                 renderRow={(rowData) => {
-                    return <ProCard style={{ width: 300 }}>
-                        {rowData.country}
-                  </ProCard>
+                    return <ProCard title={<div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
+                        {
+                            avatar && columns.filter(it => it.key == avatar)[0].render(null, rowData)
+                        }
+                        <span style={{ marginLeft: avatar ? 12 : 0 }}>{rowData[title ? title : columns[0].key]}</span>
+                    </div>} actions={columns.filter(it => it.valueType == "option")[0].render(null, rowData)}>
+                        <Row gutter={12}>
+                            {
+                                columns.filter(it => it.key != title && it.key != avatar && it.option != "option").map(it => {
+                                    return <Col span={12} key={it.key} style={{display:"flex",justifyContent:"space-between",alignItems:"center",margin:"6px 0"}}>
+                                        <span>{it.title}</span>
+                                        <span>{it.render?it.render(null,rowData):rowData[it.key]}</span>
+                                    </Col>
+                                })
+                            }
+                        </Row>
+                    </ProCard>
                 }}
                 renderSeparator={(sectionID, rowID) => (
                     <div
@@ -129,8 +143,8 @@ class Mcard extends PureComponent {
                 )}
                 style={{
                     overflow: 'auto',
-                    height:"100%",
-                    minHeight:"60vh"
+                    height: "100%",
+                    minHeight: "60vh"
                 }}
                 className={scrolltop > 0 ? 'notrans' : 'trans'}
                 pageSize={10}
